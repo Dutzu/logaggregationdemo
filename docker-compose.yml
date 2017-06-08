@@ -1,0 +1,64 @@
+version: '2'
+services:
+  lb:
+    image: haproxy:1.7
+    links:
+      - dog
+      - cat
+      - mouse
+    volumes:
+      - ./haproxy/:/usr/local/etc/haproxy/
+    ports:
+      - "8088:8088"
+      - "1936:1936"
+      - "8001:8001"
+    entrypoint: "/usr/local/sbin/haproxy -f /usr/local/etc/haproxy/haproxy.cfg -d -V"
+  dog:
+    build: ./web
+    environment:
+      - APPSERVER=dog
+    expose:
+      - "8080"
+    logging: 
+      driver: fluentd
+      options:
+        fluentd-address: "localhost:24224"
+        fluentd-async-connect: "true"
+        #https://docs.docker.com/engine/admin/logging/overview/#fluentd
+  cat:
+    build: ./web
+    environment:
+      - APPSERVER=cat
+    expose:
+      - "8080"
+    logging: 
+      driver: fluentd
+      options:
+        fluentd-address: "localhost:24224"
+        fluentd-async-connect: "true"
+        #https://docs.docker.com/engine/admin/logging/overview/#fluentd
+
+  mouse:
+    build: ./web
+    environment:
+      - APPSERVER=mouse
+    expose:
+      - "8080"
+    logging: 
+      driver: fluentd
+      options:
+        fluentd-address: "localhost:24224"
+        fluentd-async-connect: "true"
+        #https://docs.docker.com/engine/admin/logging/overview/#fluentd
+  fluentd:
+    build: ./fluentd
+    environment: 
+      - "FLUENTD_CONF=shipper.cfg"
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /sys/fs/:/sys/fs/
+    # expose: 
+      # - "24224"
+    ports:
+      - "24220:24220"
+      - "24224:24224"
