@@ -6,12 +6,13 @@ services:
       - dog
       - cat
       - mouse
+      - kibana
     volumes:
       - ./haproxy/:/usr/local/etc/haproxy/
     ports:
       - "8088:8088"
       - "1936:1936"
-      - "8001:8001"
+      - "8081:8081"
     entrypoint: "/usr/local/sbin/haproxy -f /usr/local/etc/haproxy/haproxy.cfg -d -V"
   dog:
     build: ./web
@@ -57,8 +58,19 @@ services:
     volumes: 
       - /var/run/docker.sock:/var/run/docker.sock
       - /sys/fs/:/sys/fs/
-    # expose: 
-      # - "24224"
     ports:
       - "24220:24220"
       - "24224:24224"
+    links:
+      - elasticsearch
+  elasticsearch:
+    image: elasticsearch:latest
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+  kibana:
+    image: kibana:latest
+    ports:
+      - "5601:5601"
+    links:
+      - elasticsearch
