@@ -4,7 +4,8 @@ var fs = require('fs')
     , https = require('https')
     , http = require('http')
     , express = require('express')
-    , morgan = require('morgan');
+    , morgan = require('morgan')
+    , uuid = require('uuid/v4');
 
 // App
 const app = express();
@@ -27,15 +28,9 @@ app.all('/health', function (req, res) {
 });
 
 app.all('/', function (req, res) {
-  console.log("Cookies received: " + JSON.stringify(req.cookies));
-  res.cookie('cookieName', 'web2' , { maxAge: 900000, httpOnly: true });
-  setTimeout(function() {res.send('Salut coitze from: ' + os.hostname() + "    " + process.env.APPSERVER + '   '  + req.protocol + '\nReq: ' + JSON.stringify(req.cookies) + '\n\nRes: ' + JSON.stringify(res.cookies)) + '\n\n'}, 
-  process.env.DELAY);
-});
-
-app.all('/', function (req, res) {
-  var message = 'Hello from : ' + os.hostname() + "    " + process.env.APPSERVER + '   '  + req.protocol;
-  // console.log(message);
+  var message = 'Hello from : ' + os.hostname() + "    " + process.env.APPSERVER + '   '  + req.protocol + ' correlationId:' + uuid();
+  var latency = randomIntInc(100,2000);
+  console.log(message);
   res.cookie('cookieName', 'web2' , { maxAge: 900000, httpOnly: true });
   res.status(200);
   res.send(message);

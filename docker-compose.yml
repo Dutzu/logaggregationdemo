@@ -10,8 +10,7 @@ services:
     volumes:
       - ./haproxy/:/usr/local/etc/haproxy/
     ports:
-      - "8088:8088"
-      - "1936:1936"
+      - "8080:8080"
       - "8081:8081"
     entrypoint: "/usr/local/sbin/haproxy -f /usr/local/etc/haproxy/haproxy.cfg -d -V"
   dog:

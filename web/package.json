@@ -8,8 +8,9 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "cookie-parser": "^1.4.3",
     "express": "^4.13.3",
     "morgan": "^1.7.0",
-    "cookie-parser" : "^1.4.3"
+    "uuid": "^3.1.0"
   }
 }
