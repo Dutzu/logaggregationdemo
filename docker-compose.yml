@@ -63,12 +63,12 @@ services:
     links:
       - elasticsearch
   elasticsearch:
-    image: elasticsearch:latest
+    image: elasticsearch:6.4.1
     ports:
       - "9200:9200"
       - "9300:9300"
   kibana:
-    image: kibana:latest
+    image: kibana:6.4.1
     ports:
       - "5601:5601"
     links:
